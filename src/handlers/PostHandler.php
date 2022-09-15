@@ -2,10 +2,10 @@
 namespace src\handlers;
 
 use \src\models\Post;
-use \src\models\Posts_Like;
-use \src\models\Posts_Comment;
+use \src\models\PostsLike;
+use \src\models\PostsComment;
 use \src\models\User;
-use \src\models\User_Relation;
+use \src\models\UserRelation;
 
 class PostHandler {
 
@@ -27,8 +27,8 @@ class PostHandler {
         if(count($post)>0) {
             $post = $post[0];
 
-            Posts_Like::delete()->where('id_post', $id)->execute();
-            Posts_Comment::delete()->where('id_post', $id)->execute();
+            PostsLike::delete()->where('id_post', $id)->execute();
+            PostsComment::delete()->where('id_post', $id)->execute();
 
             if($post['type'] === 'photo') {
                 $img = __DIR__.'/../../public/media/uploads/'.$post['body'];
@@ -61,12 +61,12 @@ class PostHandler {
             $newPost->user->name = $newUser['name'];
             $newPost->user->avatar = $newUser['avatar'];
 
-            $likes = Posts_Like::select()->where('id_post', $postItem['id'])->get();
+            $likes = PostsLike::select()->where('id_post', $postItem['id'])->get();
 
             $newPost->likeCount = count($likes);
             $newPost->liked = self::isLiked($postItem['id'], $loggedUserId);
 
-            $newPost->comments = Posts_Comment::select()->where('id_post', $postItem['id'])->get();
+            $newPost->comments = PostsComment::select()->where('id_post', $postItem['id'])->get();
 
             foreach($newPost->comments as $key => $comment) {
                 $newPost->comments[$key]['user'] = User::select()->where('id', $comment['id_user'])->one();
@@ -79,7 +79,7 @@ class PostHandler {
     }
 
     public static function isLiked($id, $loggedUserId) {
-        $myLike = Posts_Like::select()->where('id_post', $id)->where('id_user', $loggedUserId)->get();
+        $myLike = PostsLike::select()->where('id_post', $id)->where('id_user', $loggedUserId)->get();
 
         if(count($myLike) > 0) {
             return true;
@@ -89,11 +89,11 @@ class PostHandler {
     }
 
     public static function deleteLike($id, $loggedUserId) {
-        Posts_Like::delete()->where('id_post', $id)->where('id_user', $loggedUserId)->execute();
+        PostsLike::delete()->where('id_post', $id)->where('id_user', $loggedUserId)->execute();
     }
 
     public static function addLike($id, $loggedUserId) {
-        Posts_Like::insert([
+        PostsLike::insert([
             'id_post' => $id,
             'id_user' => $loggedUserId,
             'created_at' => date('Y-m-d H:i:s')
@@ -101,7 +101,7 @@ class PostHandler {
     }
 
     public static function addComment($id, $txt, $loggedUserId) {
-        Posts_Comment::insert([
+        PostsComment::insert([
             'id_post' => $id,
             'id_user' => $loggedUserId,
             'created_at' => date('Y-m-d H:i:s'),
@@ -130,7 +130,7 @@ class PostHandler {
     public static function getHomeFeed($idUser, $page) {
         $perPage = 2;
 
-        $userList = User_Relation::select()->where('user_from', $idUser)->get();
+        $userList = UserRelation::select()->where('user_from', $idUser)->get();
         $users = [];
         foreach($userList as $userItem) {
             $users[] = $userItem['user_to'];

@@ -8,6 +8,7 @@ use \ClanCats\Hydrahon\Query\Sql\FetchableInterface;
 class Model {
 
     protected static $_h;
+    protected static $table;
     
     public function __construct() {
         self::_checkH();
@@ -31,9 +32,15 @@ class Model {
     }
 
     public static function getTableName() {
-        $className = explode('\\', get_called_class());
-        $className = end($className);
-        return strtolower($className).'s';
+        $className = static::$table;
+
+        if(!static::$table) {
+            $className = explode('\\', get_called_class());
+            $className = end($className);
+            return strtolower($className).'s';
+        }
+
+        return $className;
     }
 
     public static function select($fields = []) {

@@ -2,7 +2,7 @@
 namespace src\handlers;
 
 use src\models\User;
-use \src\models\User_Relation;
+use \src\models\UserRelation;
 use \src\handlers\PostHandler;
 
 class UserHandler {
@@ -72,7 +72,7 @@ class UserHandler {
                 $user->following = [];
                 $user->photos = [];
 
-                $followers = User_Relation::select()->where('user_to', $id)->get();
+                $followers = UserRelation::select()->where('user_to', $id)->get();
                 foreach($followers as $follower) {
                     $userData = User::select()->where('id', $follower['user_from'])->one();
                     $newUser = new User();
@@ -83,7 +83,7 @@ class UserHandler {
                     $user->followers[] = $newUser;
                 }
 
-                $following = User_Relation::select()->where('user_from', $id)->get();
+                $following = UserRelation::select()->where('user_from', $id)->get();
                 foreach($following as $follower) {
                     $userData = User::select()->where('id', $follower['user_to'])->one();
                     $newUser = new User();
@@ -119,7 +119,7 @@ class UserHandler {
     }
 
     public static function isFollowing($from, $to) {
-        $data = User_Relation::select()->where('user_from', $from)->where('user_to', $to)->one();
+        $data = UserRelation::select()->where('user_from', $from)->where('user_to', $to)->one();
 
         if($data) {
             return true;
@@ -129,11 +129,11 @@ class UserHandler {
     }
 
     public static function unfollow($from, $to) {
-        User_Relation::delete()->where('user_from', $from)->where('user_to', $to)->execute();
+        UserRelation::delete()->where('user_from', $from)->where('user_to', $to)->execute();
     }
 
     public static function follow($from, $to) {
-        User_Relation::insert([
+        UserRelation::insert([
             'user_from' => $from,
             'user_to' => $to
         ])->execute();
