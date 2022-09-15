@@ -1,13 +1,11 @@
 <?php
 namespace core;
 
-use \src\Config;
-
 class Database {
     private static $_pdo;
     public static function getInstance() {
         if(!isset(self::$_pdo)) {
-            self::$_pdo = new \PDO(Config::DB_DRIVER.":host=".Config::DB_HOST.";dbname=".Config::DB_DATABASE, Config::DB_USER, Config::DB_PASS);
+            self::$_pdo = new \PDO($_ENV['DB_DRIVER'].":host=".$_ENV['DB_HOST'].";dbname=".$_ENV['DB_NAME'], $_ENV['DB_USER'], $_ENV['DB_PASSWORD']);
         }
         return self::$_pdo;
     }

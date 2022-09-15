@@ -6,6 +6,6 @@ Projeto realizado inicialmente no curso de PHP da [B7Web](https://b7web.com.br/f
 
 ## Melhorias
 
-- [] Suporte à mudança de Nome de Tabela.
-- [] Utilização de Variáveis de Ambiente (phpdotenv).
-- [] Cadastro com confirmação de E-mail.
+- [ ] Suporte à mudança de Nome de Tabela.
+- [ ] Utilização de Variáveis de Ambiente (phpdotenv).
+- [ ] Cadastro com confirmação de E-mail.

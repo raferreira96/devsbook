@@ -1,8 +1,6 @@
 <?php
 namespace core;
 
-use \src\Config;
-
 class RouterBase {
 
     public function run($routes) {
@@ -10,8 +8,8 @@ class RouterBase {
         $url = Request::getUrl();
 
         // Define os itens padrão
-        $controller = Config::ERROR_CONTROLLER;
-        $action = Config::DEFAULT_ACTION;
+        $controller = $_ENV['DEFAULT_CONTROLLER'];
+        $action = $_ENV['DEFAULT_ACTION'];
         $args = [];
 
         if(isset($routes[$method])) {

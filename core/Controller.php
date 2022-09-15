@@ -1,8 +1,6 @@
 <?php
 namespace core;
 
-use \src\Config;
-
 class Controller {
 
     protected function redirect($url) {
@@ -16,7 +14,7 @@ class Controller {
         if($_SERVER['SERVER_PORT'] != '80') {
             $base .= ':'.$_SERVER['SERVER_PORT'];
         }
-        $base .= Config::BASE_DIR;
+        $base .= $_ENV['BASE_DIR'];
         
         return $base;
     }
